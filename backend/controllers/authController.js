@@ -1,7 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
-import jwt from "jsonwebtoken";
+import User from "../models/User.js"; 
 
 export const registerUser = async (req, res) => {
 
@@ -57,11 +56,9 @@ export const loginUser = async(req, res) => {
     
     try{
         const { email, password } = req.body; 
-        console.log("Email from request:", email);
-        console.log("Password from request:", password);
      
         console.log("Email from request:", email);
-        console.log("Password from request:, password");
+        console.log("Password from request:", password);
  
         const user = await User.findOne({email});
 
@@ -96,16 +93,7 @@ export const loginUser = async(req, res) => {
             {
                 expiresIn: "7d"
             }
-
-        {
-            id: user._id,
-            email: user.email,
-            role: user.role,
-        },
-        process.env.JWT_SECRET,
-        {
-            expiresIn: "7d",
-        }
+ 
 
         );
 
@@ -199,4 +187,43 @@ export const updateProfile = async (req, res) => {
         });
 
     }
+};
+
+export const uploadResume = async (req, res) => {
+
+    console.log("Upload API called");
+    console.log(req.file);
+
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "No file uploaded",
+      });
+    }
+
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.resume = `/uploads/${req.file.filename}`;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Resume uploaded successfully",
+      resume: user.resume,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
