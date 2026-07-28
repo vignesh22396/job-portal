@@ -42,6 +42,21 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+
+    experience: {
+      type: String,
+      default: ""
+    },
+
+    previousCompany: {
+      type: String,
+      default: ""
+    },
+
+    noticePeriod: {
+      type: String,
+      default: ""
+    }
   },
   {
     timestamps: true,

@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
@@ -52,13 +53,16 @@ export const registerUser = async (req, res) => {
 };
 
 export const loginUser = async(req, res) => {
- 
-    try{
-        const { email, password } = req.body;
 
+    
+    try{
+        const { email, password } = req.body; 
         console.log("Email from request:", email);
         console.log("Password from request:", password);
-    
+     
+        console.log("Email from request:", email);
+        console.log("Password from request:, password");
+ 
         const user = await User.findOne({email});
 
         console.log("User from DB:", user);
@@ -82,6 +86,7 @@ export const loginUser = async(req, res) => {
         }
 
         const token = jwt.sign(
+
             {
                 id: user._id,
                 email: user.email,
@@ -91,6 +96,17 @@ export const loginUser = async(req, res) => {
             {
                 expiresIn: "7d"
             }
+
+        {
+            id: user._id,
+            email: user.email,
+            role: user.role,
+        },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: "7d",
+        }
+
         );
 
         res.status(200).json({
@@ -111,4 +127,76 @@ export const loginUser = async(req, res) => {
         })
     }
 
+};
+
+export const getProfile = async (req, res) => {
+    try {
+
+        res.status(200).json({
+            success: true,
+            message: "Profile fetched successfully",
+            user: req.user
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
+};
+
+export const updateProfile = async (req, res) => {
+    try {
+
+        const userId = req.user.id;
+
+        const {
+            name,
+            phone,
+            profileImage,
+            resume,
+            experience,
+            previousCompany,
+            noticePeriod
+        } = req.body;
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        user.name = name || user.name;
+        user.phone = phone || user.phone;
+        user.profileImage = profileImage || user.profileImage;
+        user.resume = resume || user.resume;
+        user.experience = experience || user.experience;
+        user.previousCompany = previousCompany || user.previousCompany;
+        user.noticePeriod = noticePeriod || user.noticePeriod;
+
+        await user.save();
+
+        const userData = user.toObject();
+        delete userData.password;
+
+        res.status(200).json({
+        success: true,
+        message: "Profile updated successfully",
+        user: userData,
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
 };
