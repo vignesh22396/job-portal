@@ -18,7 +18,8 @@ export default function Login() {
 
         localStorage.setItem("token", res.data.token);
 
-        alert("Login Successful");
+        window.location.href = "/dashboard";
+        
         } catch (error) {
         alert(error.response?.data?.message || "Login failed");
         }
