@@ -7,6 +7,8 @@ import Dashboard from "./pages/Dashboard";
 import Jobs from "./pages/Jobs";
 import JobDetails from "./pages/JobDetails";
 import AddJob from "./pages/AddJob";
+import MyApplications from "./pages/MyApplications";
+import RecruiterDashboard from "./pages/RecruiterDashboard";
 
 function App() {
   return (
@@ -36,6 +38,25 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/my-applications"
+          element={
+            <ProtectedRoute>
+              <MyApplications />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/recruiter-dashboard"
+          element={
+            <ProtectedRoute>
+              <RecruiterDashboard />
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
     </BrowserRouter>
   );
