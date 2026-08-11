@@ -15,7 +15,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://your-vercel-url.vercel.app",
+    origin: "https://job-portal-pied-five.vercel.app",
     credentials: true,
   })
 );
