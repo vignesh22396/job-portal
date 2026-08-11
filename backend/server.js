@@ -13,7 +13,13 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://your-vercel-url.vercel.app",
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
