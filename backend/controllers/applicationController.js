@@ -70,3 +70,61 @@ export const getMyApplications = async (req, res) => {
     });
   }
 };
+
+// Recruiter: get applicants for jobs created by this recruiter
+export const getApplicantsForMyJobs = async (req, res) => {
+  try {
+    const applications = await Application.find()
+      .populate({
+        path: "job",
+        match: { createdBy: req.user._id },
+      })
+      .populate("candidate", "name email phone experience previousCompany noticePeriod")
+      .sort({ createdAt: -1 });
+
+    // Remove applications whose job is null
+    const filteredApplications = applications.filter((app) => app.job);
+
+    res.status(200).json({
+      success: true,
+      count: filteredApplications.length,
+      applications: filteredApplications,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Recruiter: update application status
+export const updateApplicationStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    const application = await Application.findById(req.params.id);
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Application not found",
+      });
+    }
+
+    application.status = status;
+
+    await application.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Application status updated",
+      application,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
