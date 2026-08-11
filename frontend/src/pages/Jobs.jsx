@@ -14,7 +14,7 @@ export default function Jobs() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/jobs");
+        const res = await axios.get("https://job-portal-lezm.onrender.com/api/jobs");
         setJobs(res.data.jobs);
         setFilteredJobs(res.data.jobs);
       } catch (error) {

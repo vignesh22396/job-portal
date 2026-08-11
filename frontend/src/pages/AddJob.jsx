@@ -34,7 +34,7 @@ export default function AddJob() {
       };
 
       const res = await axios.post(
-        "http://localhost:5000/api/jobs/add",
+        "https://job-portal-lezm.onrender.com/api/jobs/add",
         payload,
         {
           headers: {

@@ -11,7 +11,7 @@ export default function MyApplications() {
         const token = localStorage.getItem("token");
 
         const res = await axios.get(
-          "http://localhost:5000/api/applications/my-applications",
+          "https://job-portal-lezm.onrender.com/api/applications/my-applications",
           {
             headers: {
               Authorization: `Bearer ${token}`,

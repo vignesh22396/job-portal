@@ -11,7 +11,7 @@ export default function RecruiterDashboard() {
         const token = localStorage.getItem("token");
 
         const res = await axios.get(
-          "http://localhost:5000/api/applications/recruiter/applicants",
+          "https://job-portal-lezm.onrender.com/api/applications/recruiter/applicants",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -36,7 +36,7 @@ export default function RecruiterDashboard() {
       const token = localStorage.getItem("token");
 
       await axios.put(
-        `http://localhost:5000/api/applications/status/${id}`,
+        `https://job-portal-lezm.onrender.com/api/applications/status/${id}`,
         { status },
         {
           headers: {
