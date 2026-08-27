@@ -10,6 +10,12 @@ import AddJob from "./pages/AddJob";
 import MyApplications from "./pages/MyApplications";
 import RecruiterDashboard from "./pages/RecruiterDashboard";
 
+console.log({
+  email: "rahul12343@gmail.com",
+  password: "7898764"
+});
+
+
 function App() {
   return (
     <BrowserRouter>
