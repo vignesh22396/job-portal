@@ -7,18 +7,27 @@ import path from "path";
 import jobRoutes from "./routes/jobRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://job-portal-pied-five.vercel.app"
+];
+
 dotenv.config();
 
 connectDB();
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "https://job-portal-pied-five.vercel.app",
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
 
 app.use(express.json());
 
